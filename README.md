@@ -20,7 +20,7 @@ We have removed the bundled calendars as of version 2.0.0, if you need the calen
 
 - Download the calendars you wish to use from [v1.18.0](https://github.com/gocardless/business/tree/b12c186ca6fd4ffdac85175742ff7e4d0a705ef4/lib/business/data)
 - Place them in a suitable directory in your project, typically `lib/calendars`
--  Add this directory path to your instance of `Business::Calendar` using the `load_paths` method.dd the directory to where you placed the yml files before you load the calendar
+- Add this directory path to your instance of `Business::Calendar` using the `load_paths` method.dd the directory to where you placed the yml files before you load the calendar
 
 ```ruby
 Business::Calendar.load_paths = ["lib/calendars"] # your_project/lib/calendars/ contains bacs.yml
@@ -170,6 +170,21 @@ calendar.roll_backward(date).strftime("%A, %d %B %Y")
 # => "Friday, 13 June 2014"
 ```
 
+The `next_business_day` and `previous_business_day` methods will always move to the next or previous business day, regardless of whether the given date is already a business day.
+
+```ruby
+date = Date.parse("Friday, 13 June 2014")  # A business day
+calendar.next_business_day(date).strftime("%A, %d %B %Y")
+# => "Monday, 16 June 2014"
+calendar.previous_business_day(date).strftime("%A, %d %B %Y")
+# => "Thursday, 12 June 2014"
+date = Date.parse("Saturday, 14 June 2014")  # A weekend
+calendar.next_business_day(date).strftime("%A, %d %B %Y")
+# => "Monday, 16 June 2014"
+calendar.previous_business_day(date).strftime("%A, %d %B %Y")
+# => "Friday, 13 June 2014"
+```
+
 To count the number of business days between two dates, pass the dates to `business_days_between`. This method counts from start of the first date to start of the second date. So, assuming no holidays, there would be two business days between a Monday and a Wednesday.
 
 ```ruby
@@ -190,6 +205,7 @@ Secondly, business_time supports calculations on times as well as dates. For our
 <p align="center"><img src="http://3.bp.blogspot.com/-aq4iOz2OZzs/Ty8xaQwMhtI/AAAAAAAABrM/-vn4tcRA9-4/s1600/daily-morning-awesomeness-243.jpeg" alt="I'm late for business" width="250"/></p>
 
 ## License & Contributing
+
 - business is available as open source under the terms of the [MIT License](LICENSE).
 - Bug reports and pull requests are welcome on GitHub at https://github.com/gocardless/business.
 
